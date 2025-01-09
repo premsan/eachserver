@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                method="post"
+                th:object="${grepHostFile}"
+                th:action="@{/grep/grep-host-file}"
+            >
+                <div class="field">
+                    <label class="label">File Path</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{path}"
+                            placeholder="File path input"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('path')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Pattern</label>
+                    <div class="control">
+                        <textarea
+                            class="textarea"
+                            type="text"
+                            th:field="*{pattern}"
+                            placeholder="extract [variable] from lines"
+                            rows="4"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('pattern')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+        <section class="section">
+            <table
+                class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+            >
+                <thead>
+                    <tr>
+                        <th
+                            th:each="variable : ${variables}"
+                            th:text="${variable}"
+                        >
+                            variable
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="match : ${matches}">
+                        <td th:each="value : ${match}" th:text="${value}">
+                            value
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

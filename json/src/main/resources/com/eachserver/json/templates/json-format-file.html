@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                method="post"
+                th:object="${jsonFormatFile}"
+                enctype="multipart/form-data"
+                th:action="@{/json/json-format-file}"
+            >
+                <div class="field">
+                    <div class="file">
+                        <label class="file-label">
+                            <input class="file-input" type="file" name="file" />
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label"> Choose a file… </span>
+                            </span>
+                        </label>
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('file')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Format
+                    </button>
+                </div>
+            </form>
+        </section>
+        <section class="section">
+            <div class="content">
+                <pre th:text="${output}">
+                    output
+                </pre>
+            </div>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                th:object="${paymentCreate}"
+                th:action="@{/payment/payment-create}"
+                method="post"
+            >
+                <div class="field">
+                    <label class="label">Reference Id</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{referenceId}"
+                            placeholder="Reference Id"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('referenceId')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Currency</label>
+                    <div class="select is-link">
+                        <select th:field="*{currency}">
+                            <option
+                                th:each="currency : ${CurrencyCode}"
+                                th:value="${currency}"
+                                th:text="${currency}"
+                            ></option>
+                        </select>
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('currency')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Amount</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="number"
+                            step="any"
+                            th:field="*{amount}"
+                            placeholder="Amount"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('amount')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{name}"
+                            placeholder="Name"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('name')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <textarea
+                            class="textarea"
+                            type="text"
+                            th:field="*{description}"
+                            placeholder="Description"
+                            rows="10"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('description')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

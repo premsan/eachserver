@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                th:object="${reservationCreate}"
+                th:action="@{/reservation/reservation-create}"
+                method="post"
+            >
+                <div class="field">
+                    <label class="label">Plan Id</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{planId}"
+                            placeholder="Plan Id"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('planId')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{name}"
+                            placeholder="Name"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('name')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <textarea
+                            class="textarea"
+                            type="text"
+                            th:field="*{description}"
+                            placeholder="Description"
+                            rows="10"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('description')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Start At</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="datetime-local"
+                            th:field="*{startAt}"
+                            placeholder="Start At"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('startAt')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">End At</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="datetime-local"
+                            th:field="*{endAt}"
+                            placeholder="End At"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('endAt')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

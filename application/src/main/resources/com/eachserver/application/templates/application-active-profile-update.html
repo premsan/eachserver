@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                method="post"
+                th:object="${applicationActiveProfileUpdate}"
+                th:action="@{/application/application-active-profile-update}"
+            >
+                <div class="field">
+                    <div class="select">
+                        <select th:field="*{activeProfile}">
+                            <option
+                                th:each="profile : ${profiles}"
+                                th:value="${profile}"
+                                th:text="${profile}"
+                                selected="${profile == activeProfile}"
+                            ></option>
+                        </select>
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('activeProfile')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Update Active Profile
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

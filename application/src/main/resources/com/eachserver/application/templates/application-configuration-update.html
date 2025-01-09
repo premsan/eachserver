@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section
+            class="section"
+            th:if="${applicationConfigurationUpdate != null}"
+        >
+            <form
+                method="post"
+                th:object="${applicationConfigurationUpdate}"
+                th:action="@{/application/application-configuration-update}"
+            >
+                <div
+                    class="field"
+                    th:each="property : ${applicationConfigurationUpdate.getProperties().entrySet()}"
+                >
+                    <label class="label" th:text="${property.key}">key</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{properties['__${property.key}__']}"
+                        />
+                    </div>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary is-medium">
+                        Update
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

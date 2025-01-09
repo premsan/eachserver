@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body id="top">
+        <main class="container">
+            <section class="section">
+                <form action="/authority-index">
+                    <div class="field">
+                        <label class="label">Find by id</label>
+                        <div class="control">
+                            <input
+                                class="input"
+                                type="text"
+                                name="id"
+                                th:value="${requestParams.id}"
+                                placeholder="enter authority id"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Or find by name</label>
+                        <div class="control">
+                            <input
+                                class="input"
+                                type="text"
+                                name="name"
+                                th:value="${requestParams.name}"
+                                placeholder="enter authority name"
+                            />
+                        </div>
+                    </div>
+
+                    <button class="button is-primary">Find</button>
+                </form>
+            </section>
+            <section class="section">
+                <div class="box" th:each="authority : ${authorityPage}">
+                    <div th:text="${authority.id}">authority.id</div>
+                    <div th:text="${authority.version}">authority.version</div>
+                    <div th:text="${authority.name}">authority.name</div>
+                    <div th:text="${authority.updatedAt}">
+                        authority.updatedAt
+                    </div>
+                    <div th:text="${authority.updatedBy}">
+                        authority.updatedBy
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <nav
+                    class="pagination is-centered"
+                    role="navigation"
+                    aria-label="pagination"
+                >
+                    <ul class="pagination-list">
+                        <li>
+                            <form
+                                action="/authority-index"
+                                th:if="${authorityPage.hasNext()}"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="id"
+                                    th:value="${requestParams.getId()}"
+                                />
+                                <input
+                                    type="hidden"
+                                    name="name"
+                                    th:value="${requestParams.getName()}"
+                                />
+                                <input
+                                    type="hidden"
+                                    name="page"
+                                    th:value="${requestParams.getPage() + 1}"
+                                />
+                                <button
+                                    class="pagination-link"
+                                    aria-label="Next Page"
+                                    type="submit"
+                                >
+                                    Next Page
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </nav>
+            </section>
+        </main>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

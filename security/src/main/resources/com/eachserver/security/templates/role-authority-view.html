@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <div class="container">
+                <table
+                    class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+                >
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td th:text="${roleAuthority.id}">Id</td>
+                        </tr>
+                        <tr>
+                            <th>Version</th>
+                            <td th:text="${roleAuthority.version}">Version</td>
+                        </tr>
+                        <tr>
+                            <th>Role Id</th>
+                            <td th:text="${roleAuthority.roleId}">Role Id</td>
+                        </tr>
+                        <tr>
+                            <th>Authority Id</th>
+                            <td th:text="${roleAuthority.authorityId}">
+                                Authority Id
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Updated At</th>
+                            <td th:text="${roleAuthority.updatedAt}">
+                                Updated At
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Updated By</th>
+                            <td th:text="${roleAuthority.updatedBy}">
+                                Updated By
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="buttons">
+                    <button class="button">Update</button>
+                    <button class="button is-danger">Delete</button>
+                </div>
+            </div>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

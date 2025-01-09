@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                th:object="${roleAuthorityCreate}"
+                th:action="@{/security/role-authority-create}"
+                method="post"
+            >
+                <div class="field">
+                    <label class="label">Authority Id</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{authorityId}"
+                            placeholder="Authority id input"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('authorityId')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Role Id</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{roleId}"
+                            placeholder="Role Id input"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('roleId')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

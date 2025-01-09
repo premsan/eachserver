@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                th:fragment="role-authority-create-fragment"
+                th:object="${roleAuthority}"
+                th:action="@{/role-authority-create}"
+                method="post"
+            >
+                <div class="field">
+                    <label class="label">Authority Id</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{authorityId}"
+                            placeholder="Authority id input"
+                        />
+                    </div>
+                    <p class="help is-danger" th:text="*{authorityIdError}">
+                        Authority Id Error
+                    </p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Role Id</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{roleId}"
+                            placeholder="Authority id input"
+                        />
+                    </div>
+                    <p class="help is-danger" th:text="*{roleIdError}">
+                        Role Id Error
+                    </p>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

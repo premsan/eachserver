@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <div class="container">
+                <table
+                    class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+                >
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td th:text="${reservationPlan.id}">Id</td>
+                        </tr>
+                        <tr>
+                            <th>Version</th>
+                            <td th:text="${reservationPlan.version}">
+                                Version
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Resource Id</th>
+                            <td th:text="${reservationPlan.resourceId}">
+                                Resource Id
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Chrono Unit</th>
+                            <td th:text="${reservationPlan.chronoUnit}">
+                                Chrono Unit
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Min Unit</th>
+                            <td th:text="${reservationPlan.minUnit}">
+                                Min Unit
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Max Unit</th>
+                            <td th:text="${reservationPlan.maxUnit}">
+                                Max Unit
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Zone Id</th>
+                            <td th:text="${reservationPlan.zoneId}">Zone Id</td>
+                        </tr>
+                        <tr>
+                            <th>Start At</th>
+                            <td th:text="${reservationPlan.startAt}">
+                                Start At
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>End At</th>
+                            <td th:text="${reservationPlan.endAt}">End At</td>
+                        </tr>
+                        <tr>
+                            <th>Updated At</th>
+                            <td th:text="${reservationPlan.updatedAt}">
+                                Updated At
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Updated By</th>
+                            <td th:text="${reservationPlan.updatedBy}">
+                                Updated By
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

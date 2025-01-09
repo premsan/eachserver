@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}"></head>
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section content">
+            <h2 class="title is-2">Modules</h2>
+            <div class="buttons">
+                <a
+                    class="button is-dark"
+                    th:each="entry : ${moduleFeatures}"
+                    th:href="'#' + ${entry.key}"
+                    th:text="${#messages.msgOrNull(entry.key)?:entry.key}"
+                    >link</a
+                >
+            </div>
+        </section>
+        <section class="section content" th:each="entry : ${moduleFeatures}">
+            <h2 class="title is-2">
+                <span
+                    th:id="${entry.key}"
+                    th:text="${#messages.msgOrNull(entry.key)?:entry.key}"
+                    >entry.key</span
+                >
+                <a
+                    class="is-size-4 has-text-grey"
+                    th:href="'/application/module-configuration-update/' + ${entry.key}"
+                >
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </h2>
+
+            <div class="box" th:each="feature : ${entry.value}">
+                <div class="block">
+                    <a
+                        class="button is-link is-light"
+                        th:href="${feature.path}"
+                        th:text="${#messages.msgOrNull(feature.path)?:feature.path}"
+                        >Id</a
+                    >
+                </div>
+
+                <div class="block content">
+                    <p
+                        th:text="${#messages.msgOrNull(feature.messageCode)?:feature.messageCode}"
+                    >
+                        Subtitle 4
+                    </p>
+                </div>
+
+                <div class="block tags">
+                    <span
+                        class="tag"
+                        th:each="tag : ${feature.preAuthorizeAuthorities}"
+                        th:text="${#messages.msgOrNull(tag)?:tag}"
+                        >One</span
+                    >
+                </div>
+            </div>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

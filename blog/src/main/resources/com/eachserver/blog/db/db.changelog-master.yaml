@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - includeAll:
+      path: com/eachserver/security/db/changelog
+  - includeAll:
+      path: com/eachserver/blog/db/changelog

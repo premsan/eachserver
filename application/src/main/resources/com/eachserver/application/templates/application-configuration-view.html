@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <div class="box">
+                <p class="title is-3">Active Profile</p>
+                <h2
+                    class="title is-4"
+                    th:text="${applicationConfigurationView.activeProfile}"
+                >
+                    Demo
+                </h2>
+                <a
+                    href="/application/application-active-profile-update"
+                    class="button is-primary"
+                >
+                    Update Application Profile
+                </a>
+            </div>
+            <div class="box">
+                <p class="title is-3">Restart Application</p>
+                <a
+                    href="/application/application-restart-view"
+                    class="button is-primary"
+                >
+                    View Application Restart
+                </a>
+            </div>
+            <div class="box">
+                <p class="title is-3">Update Application Configuration</p>
+                <a
+                    href="/application/application-configuration-update"
+                    class="button is-primary"
+                >
+                    Update Application Configuration
+                </a>
+            </div>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

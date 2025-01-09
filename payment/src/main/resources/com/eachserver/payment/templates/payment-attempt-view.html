@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <div class="container">
+                <table
+                    class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+                >
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td th:text="${paymentAttempt.id}">Id</td>
+                        </tr>
+                        <tr>
+                            <th>Version</th>
+                            <td th:text="${paymentAttempt.version}">Version</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Id</th>
+                            <td th:text="${paymentAttempt.paymentId}">
+                                Payment Id
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Gateway Id</th>
+                            <td th:text="${paymentAttempt.gatewayId}">
+                                Gateway Id
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Gateway Attempt Id</th>
+                            <td th:text="${paymentAttempt.gatewayAttemptId}">
+                                Gateway Id
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Gateway Attempt Url</th>
+                            <td th:text="${paymentAttempt.gatewayAttemptUrl}">
+                                Gateway Id
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Gateway Attempt Attributes</th>
+                            <td
+                                th:text="${paymentAttempt.gatewayAttemptAttributes}"
+                            >
+                                Gateway Attempt Attributes
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td th:text="${paymentAttempt.status}">Status</td>
+                        </tr>
+                        <tr>
+                            <th>Updated At</th>
+                            <td th:text="${paymentAttempt.updatedAt}">
+                                Updated At
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Updated By</th>
+                            <td th:text="${paymentAttempt.updatedBy}">
+                                Updated By
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

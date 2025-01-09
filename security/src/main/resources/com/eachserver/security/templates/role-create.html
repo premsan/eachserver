@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                method="post"
+                th:object="${roleCreate}"
+                th:action="@{/security/role-create}"
+            >
+                <div class="field">
+                    <label class="label">Role name</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{name}"
+                            placeholder="Role name input"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('name')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

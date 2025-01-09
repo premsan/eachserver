@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - includeAll:
+      path: com/eachserver/security/db/changelog
+  - includeAll:
+      path: com/eachserver/reservation/db/changelog
+  - includeAll:
+      path: com/eachserver/scheduled/db/changelog

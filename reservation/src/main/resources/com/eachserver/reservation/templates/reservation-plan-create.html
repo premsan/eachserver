@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                th:object="${reservationPlanCreate}"
+                th:action="@{/reservation/reservation-plan-create}"
+                method="post"
+            >
+                <div class="field">
+                    <label class="label">Resource Id</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{resourceId}"
+                            placeholder="Resource Id"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('resourceId')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Chrono Unit</label>
+                    <div class="select is-link">
+                        <select th:field="*{chronoUnit}">
+                            <option
+                                th:each="chronoUnit : ${T(java.time.temporal.ChronoUnit).values()}"
+                                th:value="${chronoUnit.name()}"
+                                th:text="${chronoUnit.name()}"
+                            ></option>
+                        </select>
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('chronoUnit')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Min Unit</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="number"
+                            th:field="*{minUnit}"
+                            placeholder="Min Unit"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('minUnit')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Max Unit</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="number"
+                            th:field="*{maxUnit}"
+                            placeholder="Max Unit"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('maxUnit')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Zone Id</label>
+                    <div class="select is-link">
+                        <select th:field="*{zoneId}">
+                            <option
+                                th:each="zoneId : ${T(java.time.ZoneId).getAvailableZoneIds()}"
+                                th:value="${zoneId}"
+                                th:text="${zoneId}"
+                            ></option>
+                        </select>
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('zoneId')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">Start At</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="datetime-local"
+                            th:field="*{startAt}"
+                            placeholder="Start At"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('startAt')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="label">End At</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="datetime-local"
+                            th:field="*{endAt}"
+                            placeholder="End At"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('endAt')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

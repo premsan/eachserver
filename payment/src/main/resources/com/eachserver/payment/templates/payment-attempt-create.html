@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                th:object="${paymentAttemptCreate}"
+                th:action="@{/payment/payment-attempt-create}"
+                method="post"
+            >
+                <div class="field">
+                    <label class="label">Payment Id</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            th:field="*{paymentId}"
+                            placeholder="Payment Id"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('paymentId')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <label class="radio" th:each="gatewayId : ${gatewayIds}">
+                        <input
+                            type="radio"
+                            th:name="gatewayId"
+                            th:text="${gatewayId}"
+                            th:value="${gatewayId}"
+                        />
+                    </label>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

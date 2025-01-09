@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                method="post"
+                th:action="@{'/blog/blog-delete/' + ${blog.id}}"
+            >
+                <div class="field">
+                    <p>
+                        Delete Blog
+                        <a
+                            th:href="@{'/blog/blog-view/' + ${blog.id}}"
+                            class="is-link"
+                            th:text="${blog.id}"
+                            >blog.id</a
+                        >
+                    </p>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Delete
+                    </button>
+                </div>
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

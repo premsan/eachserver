@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body id="top">
+        <header th:fragment="header">
+            <div>
+                <h1>
+                    <a>Under Construction</a>
+                </h1>
+            </div>
+        </header>
+
+        <main>
+            <section th:each="blog: ${blogs}">
+                <div th:text="${blog.id}">blog.id</div>
+                <div th:text="${blog.title}">blog.title</div>
+                <div th:text="${blog.content}">blog.content</div>
+            </section>
+        </main>
+
+        <footer th:fragment="footer"></footer>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

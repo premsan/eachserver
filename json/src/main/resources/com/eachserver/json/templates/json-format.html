@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section">
+            <form
+                method="post"
+                th:object="${jsonFormat}"
+                th:action="@{/json/json-format}"
+            >
+                <div class="field">
+                    <label class="label">JSON input</label>
+                    <div class="control">
+                        <textarea
+                            class="textarea"
+                            type="text"
+                            th:field="*{input}"
+                            placeholder="JSON input"
+                            rows="10"
+                        />
+                    </div>
+                    <ul>
+                        <li
+                            th:each="error : ${#fields.errors('input')}"
+                            th:text="${error}"
+                            class="help is-danger"
+                        />
+                    </ul>
+                </div>
+
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        Format
+                    </button>
+                </div>
+            </form>
+        </section>
+        <section class="section">
+            <div class="content">
+                <pre th:text="${output}">
+                    output
+                </pre>
+            </div>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

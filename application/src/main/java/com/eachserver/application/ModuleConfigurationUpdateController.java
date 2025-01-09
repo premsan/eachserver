@@ -33,8 +33,7 @@ public class ModuleConfigurationUpdateController {
 
     private String baseConfigurationPathFormat = "com/eachserver/{0}/config/{0}.properties";
 
-    private String profileConfigurationPathFormat =
-            "{0}/.eachserver/{1}/config/{1}-{2}.properties";
+    private String profileConfigurationPathFormat = "{0}/.eachserver/{1}/config/{1}-{2}.properties";
 
     @GetMapping("/application/module-configuration-update/{moduleId}")
     @PreAuthorize(

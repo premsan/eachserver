@@ -1,8 +1,8 @@
 package com.eachserver.json;
 
+import com.eachserver.application.FeatureMapping;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.eachserver.application.FeatureMapping;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.io.IOException;

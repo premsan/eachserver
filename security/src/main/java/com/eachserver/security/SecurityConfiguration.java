@@ -56,7 +56,8 @@ public class SecurityConfiguration {
                 .rememberMe((rememberMe) -> rememberMe.rememberMeServices(rememberMeServices()))
                 .anonymous(
                         httpSecurityAnonymousConfigurer ->
-                                httpSecurityAnonymousConfigurer.authorities("FINEA"))
+                                httpSecurityAnonymousConfigurer.authorities(
+                                        getAnonymousAuthorities()))
                 .build();
     }
 

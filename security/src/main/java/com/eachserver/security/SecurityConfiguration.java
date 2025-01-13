@@ -5,10 +5,12 @@ import com.eachserver.security.permissionevaluator.PermissionEvaluators;
 import com.eachserver.security.user.User;
 import com.eachserver.security.user.UserRepository;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
@@ -20,6 +22,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
@@ -35,8 +38,11 @@ import org.springframework.session.security.web.authentication.SpringSessionReme
 import org.springframework.util.CollectionUtils;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableJdbcRepositories("com.eachserver.security")
 public class SecurityConfiguration {
+
+    private final SecurityProperties securityProperties;
 
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
@@ -48,14 +54,16 @@ public class SecurityConfiguration {
                                         new CookieCsrfTokenRepository()))
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .rememberMe((rememberMe) -> rememberMe.rememberMeServices(rememberMeServices()))
+                .anonymous(
+                        httpSecurityAnonymousConfigurer ->
+                                httpSecurityAnonymousConfigurer.authorities(
+                                        getAnonymousAuthorities()))
                 .build();
     }
 
     @Bean
     public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService(
-            final SecurityProperties securityProperties,
-            final AuthorityRepository authorityRepository,
-            final UserRepository userRepository) {
+            final AuthorityRepository authorityRepository, final UserRepository userRepository) {
         final OidcUserService delegate = new OidcUserService();
 
         return (userRequest) -> {
@@ -98,6 +106,13 @@ public class SecurityConfiguration {
 
             if (!CollectionUtils.isEmpty(admins) && admins.contains(email)) {
                 authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            }
+
+            if (!CollectionUtils.isEmpty(securityProperties.getAuthenticatedAuthorities())) {
+
+                authorities.addAll(
+                        AuthorityUtils.createAuthorityList(
+                                securityProperties.getAuthenticatedAuthorities()));
             }
 
             return new DefaultUser(
@@ -146,5 +161,20 @@ public class SecurityConfiguration {
         public String getName() {
             return userId;
         }
+    }
+
+    private List<GrantedAuthority> getAnonymousAuthorities() {
+
+        final List<GrantedAuthority> anonymousAuthorities =
+                AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS");
+
+        if (!CollectionUtils.isEmpty(securityProperties.getAnonymousAuthorities())) {
+
+            anonymousAuthorities.addAll(
+                    AuthorityUtils.createAuthorityList(
+                            securityProperties.getAnonymousAuthorities()));
+        }
+
+        return anonymousAuthorities;
     }
 }

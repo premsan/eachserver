@@ -100,6 +100,16 @@ public class SecurityConfiguration {
                 authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
             }
 
+            if (!CollectionUtils.isEmpty(securityProperties.getAuthenticatedAuthorities())) {
+                securityProperties
+                        .getAuthenticatedAuthorities()
+                        .forEach(
+                                authenticatedAuthority ->
+                                        authorities.add(
+                                                new SimpleGrantedAuthority(
+                                                        authenticatedAuthority)));
+            }
+
             return new DefaultUser(
                     user.getId(), authorities, oidcUser.getIdToken(), oidcUser.getUserInfo());
         };

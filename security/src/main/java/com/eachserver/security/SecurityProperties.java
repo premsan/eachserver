@@ -13,4 +13,8 @@ import org.springframework.context.annotation.Configuration;
 public class SecurityProperties {
 
     private Set<String> admins;
+
+    private Set<String> authenticatedAuthorities;
+
+    private Set<String> anonymousAuthorities;
 }

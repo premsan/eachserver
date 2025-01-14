@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -39,7 +38,6 @@ import org.springframework.util.CollectionUtils;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableJdbcRepositories("com.eachserver.security")
 public class SecurityConfiguration {
 
     private final SecurityProperties securityProperties;

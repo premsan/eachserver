@@ -21,6 +21,7 @@ tasks.bootJar {
 dependencies {
     implementation(project(":application"))
     implementation(project(":db"))
+    implementation(project(":scheduled"))
     implementation(project(":ui"))
 
     api("org.springframework.boot:spring-boot-starter-security")
@@ -36,9 +37,11 @@ dependencies {
     implementation("org.liquibase:liquibase-core")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 
+    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql")
+
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

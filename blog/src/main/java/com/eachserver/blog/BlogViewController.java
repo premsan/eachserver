@@ -1,6 +1,6 @@
 package com.eachserver.blog;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.application.feature.FeatureMapping;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.asciidoctor.Options;

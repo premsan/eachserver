@@ -1,6 +1,6 @@
 package com.eachserver.reservation.reservationresource;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.application.feature.FeatureMapping;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

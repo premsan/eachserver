@@ -1,6 +1,6 @@
 package com.eachserver.reservation.reservationplan;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.application.feature.FeatureMapping;
 import com.eachserver.reservation.reservationresource.ReservationResource;
 import com.eachserver.reservation.reservationresource.ReservationResourceRepository;
 import jakarta.validation.Valid;

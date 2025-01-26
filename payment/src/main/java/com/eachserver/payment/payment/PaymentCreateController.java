@@ -1,15 +1,13 @@
 package com.eachserver.payment.payment;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.api.PaymentCreate;
+import com.eachserver.application.feature.FeatureMapping;
+import com.eachserver.security.sign.SignedToken;
+import com.nimbusds.jwt.SignedJWT;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.UUID;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContext;
@@ -28,9 +26,10 @@ public class PaymentCreateController {
     private final PaymentRepository paymentRepository;
 
     @FeatureMapping
-    @GetMapping("/payment/payment-create")
+    @GetMapping(PaymentCreate.PATH)
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('PAYMENT_PAYMENT_CREATE')")
-    public ModelAndView getPaymentCreate() {
+    public ModelAndView getPaymentCreate(
+            final @SignedToken SignedJWT signedToken, final PaymentCreate.Parameters parameters) {
 
         final ModelAndView model =
                 new ModelAndView("com/eachserver/payment/templates/payment-create");
@@ -39,15 +38,15 @@ public class PaymentCreateController {
                 Currency.getAvailableCurrencies().stream()
                         .map(Currency::getCurrencyCode)
                         .sorted(String::compareTo));
-        model.addObject("paymentCreate", new PaymentCreate());
+        model.addObject("paymentCreate", parameters);
 
         return model;
     }
 
-    @PostMapping("/payment/payment-create")
+    @PostMapping(PaymentCreate.PATH)
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('PAYMENT_PAYMENT_CREATE')")
     public ModelAndView postPaymentCreate(
-            @Valid @ModelAttribute("paymentCreate") final PaymentCreate paymentCreate,
+            @Valid @ModelAttribute("paymentCreate") final PaymentCreate.Parameters paymentCreate,
             final BindingResult bindingResult,
             final RedirectAttributes redirectAttributes,
             @CurrentSecurityContext final SecurityContext securityContext) {
@@ -77,20 +76,5 @@ public class PaymentCreateController {
 
         redirectAttributes.addAttribute("id", payment.getId());
         return new ModelAndView("redirect:/payment/payment-view/{id}");
-    }
-
-    @Getter
-    @Setter
-    private static class PaymentCreate {
-
-        @NotBlank private String referenceId;
-
-        @NotNull private Currency currency;
-
-        @NotNull private BigDecimal amount;
-
-        @NotBlank private String name;
-
-        @NotBlank private String description;
     }
 }

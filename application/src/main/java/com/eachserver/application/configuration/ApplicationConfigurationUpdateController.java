@@ -1,4 +1,4 @@
-package com.eachserver.application;
+package com.eachserver.application.configuration;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

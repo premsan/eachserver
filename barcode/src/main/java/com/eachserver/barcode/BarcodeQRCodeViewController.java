@@ -1,6 +1,6 @@
 package com.eachserver.barcode;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.application.feature.FeatureMapping;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;

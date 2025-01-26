@@ -1,5 +1,6 @@
 package com.eachserver.application;
 
+import com.eachserver.application.feature.FeatureMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

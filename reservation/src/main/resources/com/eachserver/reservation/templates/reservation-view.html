@@ -3,56 +3,68 @@
     <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
     <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
     <body>
-        <section class="section">
-            <div class="container">
-                <table
-                    class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+        <section class="section content">
+            <dl>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Id</dt>
+                    <dd th:text="${reservation.id}">Id</dd>
+                </div>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Version</dt>
+                    <dd th:text="${reservation.version}">Version</dd>
+                </div>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Plan Id</dt>
+                    <dd th:text="${reservation.planId}">Plan Id</dd>
+                </div>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Name</dt>
+                    <dd th:text="${reservation.name}">Name</dd>
+                </div>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Description</dt>
+                    <dd th:text="${reservation.description}">Description</dd>
+                </div>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Start At</dt>
+                    <dd th:text="${reservation.startAt}">Start At</dd>
+                </div>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">End At</dt>
+                    <dd th:text="${reservation.endAt}">End At</dd>
+                </div>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Updated At</dt>
+                    <dd th:text="${reservation.updatedAt}">Updated At</dd>
+                </div>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Updated By</dt>
+                    <dd th:text="${reservation.updatedBy}">Updated By</dd>
+                </div>
+            </dl>
+        </section>
+        <section class="section content">
+            <h2 class="title is-2">Action</h2>
+            <div class="buttons">
+                <a
+                    class="button is-dark"
+                    th:each="action : ${actions}"
+                    th:href="${action}"
+                    th:text="${#messages.msgOrNull(action)?:action}"
+                    >action</a
                 >
-                    <tbody>
-                        <tr>
-                            <th>Id</th>
-                            <td th:text="${reservation.id}">Id</td>
-                        </tr>
-                        <tr>
-                            <th>Version</th>
-                            <td th:text="${reservation.version}">Version</td>
-                        </tr>
-                        <tr>
-                            <th>Plan Id</th>
-                            <td th:text="${reservation.planId}">Plan Id</td>
-                        </tr>
-                        <tr>
-                            <th>Name</th>
-                            <td th:text="${reservation.name}">Name</td>
-                        </tr>
-                        <tr>
-                            <th>Description</th>
-                            <td th:text="${reservation.description}">
-                                Description
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Start At</th>
-                            <td th:text="${reservation.startAt}">Start At</td>
-                        </tr>
-                        <tr>
-                            <th>End At</th>
-                            <td th:text="${reservation.endAt}">End At</td>
-                        </tr>
-                        <tr>
-                            <th>Updated At</th>
-                            <td th:text="${reservation.updatedAt}">
-                                Updated At
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Updated By</th>
-                            <td th:text="${reservation.updatedBy}">
-                                Updated By
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            </div>
+        </section>
+        <section class="section content">
+            <h2 class="title is-2">Integration</h2>
+            <div class="buttons">
+                <a
+                    class="button is-dark"
+                    th:each="integration : ${integrations}"
+                    th:href="${integration}"
+                    th:text="${#messages.msgOrNull(integration)?:integration}"
+                    >integration</a
+                >
             </div>
         </section>
     </body>

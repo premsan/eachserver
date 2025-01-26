@@ -30,6 +30,8 @@ dependencies {
     implementation(project(":scheduled"))
     implementation(project(":security"))
     implementation(project(":ui"))
+    implementation(project(":api"))
+    implementation(project(":partner"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -38,6 +40,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.liquibase:liquibase-core")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+    implementation(libs.commons.beanutils.commons.beanutil)
     runtimeOnly("com.h2database:h2")
 
     compileOnly("org.projectlombok:lombok")

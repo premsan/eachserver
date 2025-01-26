@@ -1,4 +1,4 @@
-package com.eachserver.application;
+package com.eachserver.application.feature;
 
 import java.util.List;
 import lombok.Getter;

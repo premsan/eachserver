@@ -1,6 +1,6 @@
 package com.eachserver.payment.paymentattempt;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.application.feature.FeatureMapping;
 import com.eachserver.payment.paymentgateway.PaymentAttemptStatusFetch;
 import com.eachserver.payment.paymentgateway.PaymentAttemptStatusFetched;
 import com.eachserver.payment.paymentgateway.PaymentGateway;

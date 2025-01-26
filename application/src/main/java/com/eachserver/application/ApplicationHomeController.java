@@ -1,5 +1,7 @@
 package com.eachserver.application;
 
+import com.eachserver.application.feature.Feature;
+import com.eachserver.application.feature.FeatureMapping;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;

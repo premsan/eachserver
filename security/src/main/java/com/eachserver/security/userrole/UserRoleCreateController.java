@@ -1,6 +1,6 @@
 package com.eachserver.security.userrole;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.application.feature.FeatureMapping;
 import com.eachserver.security.role.Role;
 import com.eachserver.security.role.RoleRepository;
 import com.eachserver.security.user.User;

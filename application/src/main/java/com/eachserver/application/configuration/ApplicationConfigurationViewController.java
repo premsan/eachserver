@@ -1,4 +1,4 @@
-package com.eachserver.application;
+package com.eachserver.application.configuration;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section content">
+            <h2 class="title is-2">Host</h2>
+            <form
+                class="buttons"
+                th:each="partnerAPI : ${partnerAPIs}"
+                th:action="@{'/reservation/reservation-create-payment-view/' + ${reservation.id}}"
+                method="post"
+            >
+                <button
+                    class="button is-dark"
+                    th:name="partnerAPIId"
+                    th:value="${partnerAPI.id}"
+                    th:text="${partnerAPI.host}"
+                    type="submit"
+                />
+            </form>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

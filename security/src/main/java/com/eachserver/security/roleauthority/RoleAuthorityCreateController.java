@@ -1,6 +1,6 @@
 package com.eachserver.security.roleauthority;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.application.feature.FeatureMapping;
 import com.eachserver.security.authority.Authority;
 import com.eachserver.security.authority.AuthorityRepository;
 import com.eachserver.security.role.Role;

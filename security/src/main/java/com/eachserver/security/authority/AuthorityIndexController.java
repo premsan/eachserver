@@ -1,6 +1,6 @@
 package com.eachserver.security.authority;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.application.feature.FeatureMapping;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

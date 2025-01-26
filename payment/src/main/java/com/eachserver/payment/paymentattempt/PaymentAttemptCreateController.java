@@ -1,6 +1,6 @@
 package com.eachserver.payment.paymentattempt;
 
-import com.eachserver.application.FeatureMapping;
+import com.eachserver.application.feature.FeatureMapping;
 import com.eachserver.payment.payment.Payment;
 import com.eachserver.payment.payment.PaymentRepository;
 import com.eachserver.payment.paymentgateway.PaymentAttemptCreated;

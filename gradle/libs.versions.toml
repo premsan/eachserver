@@ -3,6 +3,7 @@ org-asciidoctor-asciidoctorj = { module="org.asciidoctor:asciidoctorj", version 
 org-junit-junit-bom = { module="org.junit:junit-bom", version = "5.10.0" }
 com-google-zxing-core = { module="com.google.zxing:core", version = "3.5.3" }
 com-google-zxing-javase = { module="com.google.zxing:javase", version = "3.5.3" }
+commons-beanutils-commons-beanutil = { module="commons-beanutils:commons-beanutils", version = "1.10.0" }
 
 [plugins]
 org-springframework-boot = { id = "org.springframework.boot", version = "3.3.3" }

@@ -19,7 +19,6 @@ tasks.bootJar {
 }
 
 dependencies {
-    implementation(project(":db"))
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

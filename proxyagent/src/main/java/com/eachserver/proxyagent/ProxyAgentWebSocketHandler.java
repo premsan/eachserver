@@ -1,7 +1,7 @@
 package com.eachserver.proxyagent;
 
-import com.eachserver.api.TunnelHttpRequest;
-import com.eachserver.api.TunnelHttpResponse;
+import com.eachserver.api.ProxyHttpRequest;
+import com.eachserver.api.ProxyHttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +36,8 @@ public class ProxyAgentWebSocketHandler extends TextWebSocketHandler {
 
         try {
 
-            final TunnelHttpRequest httpRequest =
-                    objectMapper.readValue(message.getPayload(), TunnelHttpRequest.class);
+            final ProxyHttpRequest httpRequest =
+                    objectMapper.readValue(message.getPayload(), ProxyHttpRequest.class);
 
             ResponseEntity<String> response;
             try {
@@ -73,7 +73,7 @@ public class ProxyAgentWebSocketHandler extends TextWebSocketHandler {
                                 restClientResponseException.getStatusCode());
             }
 
-            final TunnelHttpResponse httpResponse = new TunnelHttpResponse();
+            final ProxyHttpResponse httpResponse = new ProxyHttpResponse();
             httpResponse.setId(httpRequest.getId());
             httpResponse.setHeaders(response.getHeaders());
             httpResponse.setStatusCode(response.getStatusCode().value());

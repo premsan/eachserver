@@ -1,7 +1,7 @@
 package com.eachserver.proxyserver;
 
-import com.eachserver.api.TunnelHttpRequest;
-import com.eachserver.api.TunnelHttpResponse;
+import com.eachserver.api.ProxyHttpRequest;
+import com.eachserver.api.ProxyHttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> idToActiveSession = new ConcurrentHashMap<>();
-    private final Map<String, TunnelHttpResponse> tunnelHttpResponseMap = new ConcurrentHashMap<>();
+    private final Map<String, ProxyHttpResponse> responseMap = new ConcurrentHashMap<>();
 
     private final ObjectMapper objectMapper;
 
@@ -44,10 +44,10 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(final WebSocketSession session, final TextMessage message) {
 
         try {
-            final TunnelHttpResponse tunnelHttpResponse =
-                    objectMapper.readValue(message.getPayload(), TunnelHttpResponse.class);
+            final ProxyHttpResponse proxyHttpResponse =
+                    objectMapper.readValue(message.getPayload(), ProxyHttpResponse.class);
 
-            tunnelHttpResponseMap.put(tunnelHttpResponse.getId(), tunnelHttpResponse);
+            responseMap.put(proxyHttpResponse.getId(), proxyHttpResponse);
 
         } catch (final IOException e) {
 
@@ -57,22 +57,22 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
 
     public void sendMessage(final HttpServletRequest request, final HttpServletResponse response) {
 
-        final TunnelHttpRequest tunnelHttpRequest = new TunnelHttpRequest();
+        final ProxyHttpRequest proxyHttpRequest = new ProxyHttpRequest();
 
-        tunnelHttpRequest.setId(UUID.randomUUID().toString());
-        tunnelHttpRequest.setUri(
+        proxyHttpRequest.setId(UUID.randomUUID().toString());
+        proxyHttpRequest.setUri(
                 UriComponentsBuilder.fromPath(request.getRequestURI())
                         .replaceQuery(request.getQueryString())
                         .build()
                         .toUri());
-        tunnelHttpRequest.setMethod(request.getMethod());
-        tunnelHttpRequest.setHeaders(new HashMap<>());
+        proxyHttpRequest.setMethod(request.getMethod());
+        proxyHttpRequest.setHeaders(new HashMap<>());
 
         for (final Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements(); ) {
 
             final String headerName = e.nextElement();
             final List<String> headerValues = new ArrayList<>();
-            tunnelHttpRequest.getHeaders().put(headerName, headerValues);
+            proxyHttpRequest.getHeaders().put(headerName, headerValues);
 
             for (final Enumeration<String> e1 = request.getHeaders(headerName);
                     e1.hasMoreElements(); ) {
@@ -82,7 +82,7 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
         }
 
         try {
-            tunnelHttpRequest.setBody(
+            proxyHttpRequest.setBody(
                     request.getReader()
                             .lines()
                             .collect(Collectors.joining(System.lineSeparator())));
@@ -97,23 +97,23 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
             }
 
             webSocketSession.sendMessage(
-                    new TextMessage(objectMapper.writeValueAsString(tunnelHttpRequest)));
+                    new TextMessage(objectMapper.writeValueAsString(proxyHttpRequest)));
 
             while (true) {
 
-                final TunnelHttpResponse tunnelHttpResponse =
-                        tunnelHttpResponseMap.get(tunnelHttpRequest.getId());
+                final ProxyHttpResponse proxyHttpResponse =
+                        responseMap.get(proxyHttpRequest.getId());
 
-                if (tunnelHttpResponse == null) {
+                if (proxyHttpResponse == null) {
 
                     Thread.sleep(100);
 
                     continue;
                 }
 
-                response.setStatus(tunnelHttpResponse.getStatusCode());
+                response.setStatus(proxyHttpResponse.getStatusCode());
 
-                final Map<String, List<String>> headers = tunnelHttpResponse.getHeaders();
+                final Map<String, List<String>> headers = proxyHttpResponse.getHeaders();
 
                 if (headers != null) {
 
@@ -124,9 +124,9 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
                                                     response.setHeader(headerName, headerValue)));
                 }
 
-                if (tunnelHttpResponse.getBody() != null) {
+                if (proxyHttpResponse.getBody() != null) {
 
-                    response.getWriter().write(tunnelHttpResponse.getBody());
+                    response.getWriter().write(proxyHttpResponse.getBody());
                     response.getWriter().flush();
                 }
 

@@ -5,12 +5,15 @@ import com.eachserver.api.TunnelHttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
@@ -25,21 +28,46 @@ public class TunnelClientWebSocketHandler extends TextWebSocketHandler {
         try {
 
             final TunnelHttpRequest httpRequest =
-                    objectMapper.readValue(message.asBytes(), TunnelHttpRequest.class);
+                    objectMapper.readValue(message.getPayload(), TunnelHttpRequest.class);
 
-            final ResponseEntity<String> response =
-                    restClient
-                            .method(httpRequest.getMethod())
-                            .uri(httpRequest.getUri())
-                            .headers(httpHeaders -> httpHeaders.addAll(httpRequest.getHeaders()))
-                            .body(httpRequest.getBody())
-                            .retrieve()
-                            .toEntity(String.class);
+            ResponseEntity<String> response;
+            try {
+
+                response =
+                        restClient
+                                .method(HttpMethod.valueOf(httpRequest.getMethod()))
+                                .uri(
+                                        UriComponentsBuilder.fromHttpUrl("http://localhost:8080")
+                                                .path(httpRequest.getUri().getPath())
+                                                .build()
+                                                .toUriString())
+                                .headers(
+                                        httpHeaders -> {
+                                            for (final String headerName :
+                                                    httpRequest.getHeaders().keySet()) {
+
+                                                httpHeaders.put(
+                                                        headerName,
+                                                        httpRequest.getHeaders().get(headerName));
+                                            }
+                                        })
+                                .body(httpRequest.getBody())
+                                .retrieve()
+                                .toEntity(String.class);
+            } catch (RestClientResponseException restClientResponseException) {
+
+                response =
+                        new ResponseEntity<>(
+                                restClientResponseException.getResponseBodyAsString(),
+                                restClientResponseException.getResponseHeaders(),
+                                restClientResponseException.getStatusCode());
+            }
 
             final TunnelHttpResponse httpResponse = new TunnelHttpResponse();
+            httpResponse.setId(httpRequest.getId());
             httpResponse.setHeaders(response.getHeaders());
-            httpResponse.setStatusCode(response.getStatusCode());
-            httpResponse.setBody(httpResponse.getBody());
+            httpResponse.setStatusCode(response.getStatusCode().value());
+            httpResponse.setBody(response.getBody());
 
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(httpResponse)));
 

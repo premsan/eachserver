@@ -1,9 +1,9 @@
 package com.eachserver.api;
 
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 
 @Getter
 @Setter
@@ -11,9 +11,9 @@ public class TunnelHttpResponse {
 
     private String id;
 
-    private HttpHeaders headers;
+    private Map<String, List<String>> headers;
 
-    private HttpStatusCode statusCode;
+    private int statusCode;
 
     private String body;
 }

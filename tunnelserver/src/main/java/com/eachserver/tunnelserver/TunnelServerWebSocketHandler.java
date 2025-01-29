@@ -7,14 +7,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -43,7 +44,7 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
 
         try {
             final TunnelHttpResponse tunnelHttpResponse =
-                    objectMapper.readValue(message.asBytes(), TunnelHttpResponse.class);
+                    objectMapper.readValue(message.getPayload(), TunnelHttpResponse.class);
 
             tunnelHttpResponseMap.put(tunnelHttpResponse.getId(), tunnelHttpResponse);
 
@@ -59,8 +60,21 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
 
         tunnelHttpRequest.setId(UUID.randomUUID().toString());
         tunnelHttpRequest.setUri(URI.create(request.getRequestURI()));
-        tunnelHttpRequest.setMethod(HttpMethod.valueOf(request.getMethod()));
-        tunnelHttpRequest.setHeaders(tunnelHttpRequest.getHeaders());
+        tunnelHttpRequest.setMethod(request.getMethod());
+        tunnelHttpRequest.setHeaders(new HashMap<>());
+
+        for (final Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements(); ) {
+
+            final String headerName = e.nextElement();
+            final List<String> headerValues = new ArrayList<>();
+            tunnelHttpRequest.getHeaders().put(headerName, headerValues);
+
+            for (final Enumeration<String> e1 = request.getHeaders(headerName);
+                    e1.hasMoreElements(); ) {
+
+                headerValues.add(e1.nextElement());
+            }
+        }
 
         try {
             tunnelHttpRequest.setBody(
@@ -92,9 +106,9 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
                     continue;
                 }
 
-                response.setStatus(tunnelHttpResponse.getStatusCode().value());
+                response.setStatus(tunnelHttpResponse.getStatusCode());
 
-                final HttpHeaders headers = tunnelHttpResponse.getHeaders();
+                final Map<String, List<String>> headers = tunnelHttpResponse.getHeaders();
 
                 if (headers != null) {
 
@@ -120,6 +134,6 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
 
         final String subdomain = request.getServerName().split("\\.")[0];
 
-        return subdomain;
+        return new ArrayList<>(idToActiveSession.keySet()).get(0);
     }
 }

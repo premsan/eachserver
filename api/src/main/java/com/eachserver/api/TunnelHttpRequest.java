@@ -1,10 +1,10 @@
 package com.eachserver.api;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 
 @Getter
 @Setter
@@ -12,11 +12,11 @@ public class TunnelHttpRequest {
 
     private String id;
 
-    private HttpMethod method;
+    private String method;
 
     private URI uri;
 
-    private HttpHeaders headers;
+    private Map<String, List<String>> headers;
 
     private String body;
 }

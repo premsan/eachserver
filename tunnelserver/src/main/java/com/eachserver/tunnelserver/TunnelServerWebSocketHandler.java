@@ -33,9 +33,6 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
         idToActiveSession.put(session.getId(), session);
-
-        System.out.println("SESSION ID" + session.getId());
-
         super.afterConnectionEstablished(session);
     }
 
@@ -43,9 +40,6 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(final WebSocketSession session, final TextMessage message) {
 
         try {
-
-            System.out.println(message.getPayload());
-
             final TunnelHttpResponse tunnelHttpResponse =
                     objectMapper.readValue(message.getPayload(), TunnelHttpResponse.class);
 
@@ -91,8 +85,6 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
 
             final WebSocketSession webSocketSession =
                     idToActiveSession.get(getSessionId(request, response));
-
-            System.out.println(getSessionId(request, response));
 
             if (webSocketSession == null) {
 

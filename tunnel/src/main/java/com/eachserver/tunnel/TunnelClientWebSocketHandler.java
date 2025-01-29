@@ -39,8 +39,6 @@ public class TunnelClientWebSocketHandler extends TextWebSocketHandler {
             final TunnelHttpRequest httpRequest =
                     objectMapper.readValue(message.getPayload(), TunnelHttpRequest.class);
 
-            System.out.println(httpRequest);
-
             ResponseEntity<String> response;
             try {
 

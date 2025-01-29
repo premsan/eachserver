@@ -15,11 +15,13 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @RequiredArgsConstructor
 public class TunnelServerConfiguration implements WebSocketConfigurer {
 
+    private final AuthenticationHandshakeInterceptor authenticationHandshakeInterceptor;
     private final TunnelServerWebSocketHandler tunnelServerWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(tunnelServerWebSocketHandler, "/tunnel");
+        registry.addHandler(tunnelServerWebSocketHandler, "/tunnel")
+                .addInterceptors(authenticationHandshakeInterceptor);
     }
 
     @Bean

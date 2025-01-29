@@ -1,4 +1,4 @@
-package com.eachserver.tunnel;
+package com.eachserver.api;
 
 import java.net.URI;
 import lombok.Getter;
@@ -9,6 +9,8 @@ import org.springframework.http.HttpMethod;
 @Getter
 @Setter
 public class TunnelHttpRequest {
+
+    private String id;
 
     private HttpMethod method;
 

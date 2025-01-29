@@ -1,5 +1,7 @@
 package com.eachserver.tunnel;
 
+import com.eachserver.api.TunnelHttpRequest;
+import com.eachserver.api.TunnelHttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;

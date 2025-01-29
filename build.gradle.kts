@@ -7,7 +7,7 @@ plugins {
  * Extra properties
  */
 val artifactVersion by extra("0.0.1-SNAPSHOT")
-val javaToolChainVersion by extra(17)
+val javaToolChainVersion by extra(21)
 val googleJavaFormatVersion by extra("1.19.2")
 val htmlTabWidth by extra(4)
 

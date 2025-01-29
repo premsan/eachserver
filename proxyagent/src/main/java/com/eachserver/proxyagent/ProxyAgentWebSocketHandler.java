@@ -1,4 +1,4 @@
-package com.eachserver.tunnel;
+package com.eachserver.proxyagent;
 
 import com.eachserver.api.TunnelHttpRequest;
 import com.eachserver.api.TunnelHttpResponse;
@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
-public class TunnelClientWebSocketHandler extends TextWebSocketHandler {
+public class ProxyAgentWebSocketHandler extends TextWebSocketHandler {
 
     private final CloseableHttpClient build =
             HttpClientBuilder.create().disableRedirectHandling().build();

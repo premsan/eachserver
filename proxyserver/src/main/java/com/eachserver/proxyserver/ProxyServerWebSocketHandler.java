@@ -1,4 +1,4 @@
-package com.eachserver.tunnelserver;
+package com.eachserver.proxyserver;
 
 import com.eachserver.api.TunnelHttpRequest;
 import com.eachserver.api.TunnelHttpResponse;
@@ -24,7 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
-public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
+public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> idToActiveSession = new ConcurrentHashMap<>();
     private final Map<String, TunnelHttpResponse> tunnelHttpResponseMap = new ConcurrentHashMap<>();

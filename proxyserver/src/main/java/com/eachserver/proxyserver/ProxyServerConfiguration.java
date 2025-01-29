@@ -1,4 +1,4 @@
-package com.eachserver.tunnelserver;
+package com.eachserver.proxyserver;
 
 import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
@@ -13,15 +13,16 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @Configuration
 @EnableWebSocket
 @RequiredArgsConstructor
-public class TunnelServerConfiguration implements WebSocketConfigurer {
+public class ProxyServerConfiguration implements WebSocketConfigurer {
 
-    private final AuthenticationHandshakeInterceptor authenticationHandshakeInterceptor;
-    private final TunnelServerWebSocketHandler tunnelServerWebSocketHandler;
+    private final ProxyServerAuthenticationHandshakeInterceptor
+            proxyServerAuthenticationHandshakeInterceptor;
+    private final ProxyServerWebSocketHandler proxyServerWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(tunnelServerWebSocketHandler, "/tunnel")
-                .addInterceptors(authenticationHandshakeInterceptor);
+        registry.addHandler(proxyServerWebSocketHandler, "/tunnel")
+                .addInterceptors(proxyServerAuthenticationHandshakeInterceptor);
     }
 
     @Bean

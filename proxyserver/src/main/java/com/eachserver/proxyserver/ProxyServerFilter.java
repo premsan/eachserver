@@ -1,4 +1,4 @@
-package com.eachserver.tunnelserver;
+package com.eachserver.proxyserver;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,9 +16,9 @@ import org.springframework.web.filter.GenericFilterBean;
 @Service
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
-public class TunnelFilter extends GenericFilterBean {
+public class ProxyServerFilter extends GenericFilterBean {
 
-    private final TunnelServerWebSocketHandler serverWebSocketHandler;
+    private final ProxyServerWebSocketHandler serverWebSocketHandler;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)

@@ -1,4 +1,4 @@
-package com.eachserver.tunnel;
+package com.eachserver.proxyagent;
 
 import jakarta.websocket.ContainerProvider;
 import jakarta.websocket.WebSocketContainer;
@@ -13,9 +13,9 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @Configuration
 @EnableWebSocket
 @RequiredArgsConstructor
-public class TunnelConfiguration {
+public class ProxyAgentConfiguration {
 
-    private final TunnelClientWebSocketHandler tunnelClientWebSocketHandler;
+    private final ProxyAgentWebSocketHandler proxyAgentWebSocketHandler;
 
     @Bean
     public ServletServerContainerFactoryBean createServletServerContainerFactoryBean() {
@@ -35,7 +35,7 @@ public class TunnelConfiguration {
         WebSocketConnectionManager webSocketConnectionManager =
                 new WebSocketConnectionManager(
                         new StandardWebSocketClient(container),
-                        tunnelClientWebSocketHandler,
+                        proxyAgentWebSocketHandler,
                         "ws://localhost:8081/tunnel");
         webSocketConnectionManager.setAutoStartup(true);
         return webSocketConnectionManager;

@@ -34,7 +34,7 @@ dependencies {
     implementation(project(":reservation"))
     implementation(project(":scheduled"))
     implementation(project(":security"))
-    implementation(project(":tunnel"))
+    implementation(project(":proxyagent"))
     implementation(project(":ui"))
 
     implementation("org.springframework.boot:spring-boot-starter")

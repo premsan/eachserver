@@ -1,4 +1,4 @@
-package com.eachserver.tunnelserver;
+package com.eachserver.proxyserver;
 
 import java.util.Map;
 import org.springframework.http.server.ServerHttpRequest;
@@ -8,7 +8,7 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 @Service
-public class AuthenticationHandshakeInterceptor implements HandshakeInterceptor {
+public class ProxyServerAuthenticationHandshakeInterceptor implements HandshakeInterceptor {
 
     @Override
     public boolean beforeHandshake(

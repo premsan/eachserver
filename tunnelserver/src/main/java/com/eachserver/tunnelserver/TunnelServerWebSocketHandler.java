@@ -15,14 +15,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Service
-@Order()
 @RequiredArgsConstructor
 public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
 
@@ -36,6 +34,8 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
 
         idToActiveSession.put(session.getId(), session);
 
+        System.out.println("SESSION ID" + session.getId());
+
         super.afterConnectionEstablished(session);
     }
 
@@ -43,6 +43,9 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(final WebSocketSession session, final TextMessage message) {
 
         try {
+
+            System.out.println(message.getPayload());
+
             final TunnelHttpResponse tunnelHttpResponse =
                     objectMapper.readValue(message.getPayload(), TunnelHttpResponse.class);
 
@@ -85,6 +88,8 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
             final WebSocketSession webSocketSession =
                     idToActiveSession.get(getSessionId(request, response));
 
+            System.out.println(getSessionId(request, response));
+
             if (webSocketSession == null) {
 
                 response.setStatus(404);
@@ -119,7 +124,11 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
                                                     response.setHeader(headerName, headerValue)));
                 }
 
-                response.getWriter().write(tunnelHttpResponse.getBody());
+                if (tunnelHttpResponse.getBody() != null) {
+
+                    response.getWriter().write(tunnelHttpResponse.getBody());
+                    response.getWriter().flush();
+                }
 
                 return;
             }

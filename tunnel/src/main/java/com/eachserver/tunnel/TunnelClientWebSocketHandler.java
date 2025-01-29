@@ -5,8 +5,11 @@ import com.eachserver.api.TunnelHttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
@@ -19,8 +22,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class TunnelClientWebSocketHandler extends TextWebSocketHandler {
 
+    private final CloseableHttpClient build =
+            HttpClientBuilder.create().disableRedirectHandling().build();
+
     private final ObjectMapper objectMapper;
-    private final RestClient restClient = RestClient.create();
+    private final RestClient restClient =
+            RestClient.builder()
+                    .requestFactory(new HttpComponentsClientHttpRequestFactory(build))
+                    .build();
 
     @Override
     protected void handleTextMessage(final WebSocketSession session, final TextMessage message) {
@@ -29,6 +38,8 @@ public class TunnelClientWebSocketHandler extends TextWebSocketHandler {
 
             final TunnelHttpRequest httpRequest =
                     objectMapper.readValue(message.getPayload(), TunnelHttpRequest.class);
+
+            System.out.println(httpRequest);
 
             ResponseEntity<String> response;
             try {

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +62,11 @@ public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
         final TunnelHttpRequest tunnelHttpRequest = new TunnelHttpRequest();
 
         tunnelHttpRequest.setId(UUID.randomUUID().toString());
-        tunnelHttpRequest.setUri(URI.create(request.getRequestURI()));
+        tunnelHttpRequest.setUri(
+                UriComponentsBuilder.fromPath(request.getRequestURI())
+                        .replaceQuery(request.getQueryString())
+                        .build()
+                        .toUri());
         tunnelHttpRequest.setMethod(request.getMethod());
         tunnelHttpRequest.setHeaders(new HashMap<>());
 

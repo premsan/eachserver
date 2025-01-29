@@ -48,8 +48,9 @@ public class TunnelClientWebSocketHandler extends TextWebSocketHandler {
                         restClient
                                 .method(HttpMethod.valueOf(httpRequest.getMethod()))
                                 .uri(
-                                        UriComponentsBuilder.fromHttpUrl("http://localhost:8080")
+                                        UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:8080")
                                                 .path(httpRequest.getUri().getPath())
+                                                .query(httpRequest.getUri().getQuery())
                                                 .build()
                                                 .toUriString())
                                 .headers(

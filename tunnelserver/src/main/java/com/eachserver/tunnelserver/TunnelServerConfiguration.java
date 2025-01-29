@@ -15,7 +15,6 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @RequiredArgsConstructor
 public class TunnelServerConfiguration implements WebSocketConfigurer {
 
-    private final TunnelFilter tunnelFilter;
     private final TunnelServerWebSocketHandler tunnelServerWebSocketHandler;
 
     @Override

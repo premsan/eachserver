@@ -1,5 +1,6 @@
 package com.eachserver.proxyserver;
 
+import com.eachserver.api.ProxyServerConnect;
 import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
@@ -15,21 +16,23 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @RequiredArgsConstructor
 public class ProxyServerConfiguration implements WebSocketConfigurer {
 
+    private static final int MAX_MESSAGE_BUFFER_SIZE = 10 * 1024 * 1024;
+
     private final ProxyServerAuthenticationHandshakeInterceptor
             proxyServerAuthenticationHandshakeInterceptor;
     private final ProxyServerWebSocketHandler proxyServerWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(proxyServerWebSocketHandler, "/tunnel")
-                .addInterceptors(proxyServerAuthenticationHandshakeInterceptor);
+        registry.addHandler(proxyServerWebSocketHandler, ProxyServerConnect.PATH);
+        //                .addInterceptors(proxyServerAuthenticationHandshakeInterceptor);
     }
 
     @Bean
     public ServletServerContainerFactoryBean createServletServerContainerFactoryBean() {
         ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
-        container.setMaxTextMessageBufferSize(15000000);
-        container.setMaxBinaryMessageBufferSize(15000000);
+        container.setMaxTextMessageBufferSize(MAX_MESSAGE_BUFFER_SIZE);
+        container.setMaxBinaryMessageBufferSize(MAX_MESSAGE_BUFFER_SIZE);
         return container;
     }
 

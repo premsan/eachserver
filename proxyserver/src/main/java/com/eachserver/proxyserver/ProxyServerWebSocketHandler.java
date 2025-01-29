@@ -106,7 +106,7 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
 
                 if (tunnelHttpResponse == null) {
 
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
 
                     continue;
                 }

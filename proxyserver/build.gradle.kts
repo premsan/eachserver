@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     implementation(project(":api"))
+    implementation(project(":application"))
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

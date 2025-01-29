@@ -18,7 +18,7 @@ public class ProxyServerAuthenticationHandshakeInterceptor implements HandshakeI
             Map<String, Object> attributes)
             throws Exception {
 
-        return false;
+        return true;
     }
 
     @Override

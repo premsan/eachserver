@@ -12,11 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -24,15 +26,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class TunnelServerWebSocketHandler extends TextWebSocketHandler {
 
-    private final Map<String, WebSocketSession> idToActiveSession = new HashMap<>();
-    private final Map<String, TunnelHttpResponse> tunnelHttpResponseMap = new HashMap<>();
+    private final Map<String, WebSocketSession> idToActiveSession = new ConcurrentHashMap<>();
+    private final Map<String, TunnelHttpResponse> tunnelHttpResponseMap = new ConcurrentHashMap<>();
 
     private final ObjectMapper objectMapper;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
-        idToActiveSession.put(session.getId(), session);
+        idToActiveSession.put(
+                session.getId(),
+                new ConcurrentWebSocketSessionDecorator(session, 10000, 10 * 1024 * 1024));
         super.afterConnectionEstablished(session);
     }
 

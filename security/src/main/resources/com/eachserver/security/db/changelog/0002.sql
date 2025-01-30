@@ -39,14 +39,18 @@ CREATE UNIQUE INDEX "security_role_authority_ix3" ON "security_role_authority" (
 CREATE TABLE "security_user" (
     "id" CHAR(36) NOT NULL,
     "version" INT NOT NULL,
-    "email" VARCHAR(256) NOT NULL,
+    "owner_id" CHAR(36),
+    "email" VARCHAR(256),
+    "password_hash" VARCHAR(256),
     "disabled" BOOLEAN DEFAULT FALSE NOT NULL,
     "updated_at" BIGINT NOT NULL,
     "updated_by" CHAR(36) NOT NULL,
-    CONSTRAINT "security_user_pk" PRIMARY KEY ("id")
+    CONSTRAINT "security_user_pk" PRIMARY KEY ("id"),
+    CONSTRAINT "security_user_owner_id_fk1" FOREIGN KEY ("owner_id") REFERENCES "security_user" ("id") ON DELETE CASCADE
 );
 
-CREATE UNIQUE INDEX "security_user_idx1" ON "security_user" ("email");
+CREATE INDEX "security_user_idx1" ON "security_user" ("owner_id");
+CREATE UNIQUE INDEX "security_user_idx2" ON "security_user" ("email");
 
 CREATE TABLE "security_user_role" (
     "id" CHAR(36) NOT NULL,

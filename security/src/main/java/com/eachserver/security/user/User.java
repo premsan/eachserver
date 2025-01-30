@@ -24,8 +24,14 @@ public class User {
     @Column("version")
     private Long version;
 
+    @Column("owner_id")
+    private String ownerId;
+
     @Column("email")
     private String email;
+
+    @Column("password_hash")
+    private String passwordHash;
 
     @Column("disabled")
     private Boolean disabled;

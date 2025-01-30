@@ -14,6 +14,8 @@ public class ProxyAgentProperties {
 
     private URI server;
 
+    private URI websocketUriOverride;
+
     private String username;
 
     private String password;

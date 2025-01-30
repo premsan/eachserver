@@ -13,7 +13,7 @@ public final class PaymentCreate {
 
     @Getter
     @Setter
-    public static class Parameters {
+    public static class RequestParameters {
 
         @NotBlank private String referenceId;
 

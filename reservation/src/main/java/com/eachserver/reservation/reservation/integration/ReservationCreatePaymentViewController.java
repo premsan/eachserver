@@ -74,8 +74,8 @@ public class ReservationCreatePaymentViewController {
             return new ModelAndView("com/eachserver/ui/templates/not-found");
         }
 
-        PaymentCreate.Parameters parameters = new PaymentCreate.Parameters();
-        parameters.setReferenceId(optionalReservation.get().getId());
+        PaymentCreate.RequestParameters requestParameters = new PaymentCreate.RequestParameters();
+        requestParameters.setReferenceId(optionalReservation.get().getId());
 
         UriComponentsBuilder uriComponentsBuilder =
                 UriComponentsBuilder.fromHttpUrl(optionalPartnerAPI.get().getHost())
@@ -86,7 +86,9 @@ public class ReservationCreatePaymentViewController {
                                         .createToken(
                                                 optionalPartnerAPI.get(),
                                                 new JWTClaimsSet.Builder()
-                                                        .claim("parameters", parameters))
+                                                        .claim(
+                                                                "requestParameters",
+                                                                requestParameters))
                                         .serialize());
 
         final RedirectView redirectView = new RedirectView();

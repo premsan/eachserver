@@ -1,6 +1,5 @@
 package com.eachserver.proxyagent;
 
-import com.eachserver.api.ProxyServerConnect;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +7,6 @@ import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Configuration
 @EnableWebSocket
@@ -32,12 +30,11 @@ public class ProxyAgentConfiguration {
     public WebSocketConnectionManager webSocketConnectionManager() {
 
         WebSocketConnectionManager webSocketConnectionManager =
-                new WebSocketConnectionManager(
+                new ProxyAgentWebSocketConnectionManager(
+                        proxyAgentProperties,
                         new StandardWebSocketClient(),
-                        proxyAgentWebSocketHandler,
-                        UriComponentsBuilder.fromUri(proxyAgentProperties.getServer())
-                                .path(ProxyServerConnect.PATH)
-                                .toUriString());
+                        proxyAgentWebSocketHandler);
+
         webSocketConnectionManager
                 .getHeaders()
                 .setBasicAuth(

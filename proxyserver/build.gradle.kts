@@ -19,7 +19,6 @@ dependencies {
     implementation(project(":application"))
     implementation(project(":security"))
 
-
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 

@@ -3,26 +3,15 @@
     <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
     <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
     <body id="top">
-        <header th:fragment="header">
-            <div>
-                <h1>
-                    <a>Users</a>
-                </h1>
-            </div>
-        </header>
-
-        <main>
-            <section th:each="user: ${users}">
-                <div th:text="${user.id}">user.id</div>
-                <div th:text="${user.version}">user.version</div>
-                <div th:text="${user.email}">user.email</div>
-                <div th:text="${user.disabled}">user.disabled</div>
-                <div th:text="${user.updatedAt}">user.updatedAt</div>
-                <div th:text="${user.updatedBy}">user.updatedBy</div>
-            </section>
-        </main>
-
-        <footer th:fragment="footer"></footer>
+        <section th:each="user: ${users}">
+            <div th:text="${user.id}">user.id</div>
+            <div th:text="${user.version}">user.version</div>
+            <div th:text="${user.ownerId}">user.ownerId</div>
+            <div th:text="${user.email}">user.email</div>
+            <div th:text="${user.disabled}">user.disabled</div>
+            <div th:text="${user.updatedAt}">user.updatedAt</div>
+            <div th:text="${user.updatedBy}">user.updatedBy</div>
+        </section>
     </body>
     <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
 </html>

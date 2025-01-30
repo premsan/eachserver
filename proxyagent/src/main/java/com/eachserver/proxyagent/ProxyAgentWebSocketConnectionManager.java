@@ -16,6 +16,8 @@ public class ProxyAgentWebSocketConnectionManager extends WebSocketConnectionMan
 
     private final ProxyAgentProperties proxyAgentProperties;
 
+    private URI websocketUri;
+
     public ProxyAgentWebSocketConnectionManager(
             final ProxyAgentProperties proxyAgentProperties,
             final WebSocketClient client,
@@ -36,6 +38,11 @@ public class ProxyAgentWebSocketConnectionManager extends WebSocketConnectionMan
                     .toUri();
         }
 
+        if (Objects.nonNull(websocketUri)) {
+
+            return websocketUri;
+        }
+
         final ProxyServerHost.ResponseBody responseBody =
                 restClient
                         .get()
@@ -52,6 +59,7 @@ public class ProxyAgentWebSocketConnectionManager extends WebSocketConnectionMan
                         .retrieve()
                         .body(ProxyServerHost.ResponseBody.class);
 
-        return responseBody.getHost().getUri();
+        websocketUri = responseBody.getHost().getUri();
+        return websocketUri;
     }
 }

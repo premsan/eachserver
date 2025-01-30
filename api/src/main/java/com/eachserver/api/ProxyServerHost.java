@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class ProxyServerHost {
 
-    public static final String PATH = "/proxyserver/host";
+    public static final String PATH = "/proxyserver/host.json";
 
     @Getter
     @Setter

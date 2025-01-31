@@ -35,6 +35,7 @@ dependencies {
     implementation(project(":scheduled"))
     implementation(project(":security"))
     implementation(project(":proxyagent"))
+    implementation(project(":proxyserver"))
     implementation(project(":ui"))
 
     implementation("org.springframework.boot:spring-boot-starter")

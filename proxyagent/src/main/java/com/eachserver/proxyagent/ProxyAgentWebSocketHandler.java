@@ -56,6 +56,10 @@ public class ProxyAgentWebSocketHandler extends TextWebSocketHandler {
                                             for (final String headerName :
                                                     httpRequest.getHeaders().keySet()) {
 
+                                                if (headerName.equalsIgnoreCase("Host")) {
+                                                    continue;
+                                                }
+
                                                 httpHeaders.put(
                                                         headerName,
                                                         httpRequest.getHeaders().get(headerName));

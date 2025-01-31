@@ -121,8 +121,13 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
                 final ProxyHttpResponse proxyHttpResponse =
                         responseById.remove(proxyHttpRequest.getId());
 
-                if (proxyHttpResponse == null
-                        && (System.currentTimeMillis() - waitStartMs) < WAIT_RESPONSE_MAX_MS) {
+                if (proxyHttpResponse == null) {
+
+                    if ((System.currentTimeMillis() - waitStartMs) > WAIT_RESPONSE_MAX_MS) {
+
+                        response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
+                        return;
+                    }
 
                     Thread.sleep(WAIT_RESPONSE_SLEEP_MS);
 

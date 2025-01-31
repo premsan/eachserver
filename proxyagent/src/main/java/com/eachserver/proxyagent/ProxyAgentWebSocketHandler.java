@@ -7,6 +7,7 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -21,6 +22,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 @RequiredArgsConstructor
 public class ProxyAgentWebSocketHandler extends TextWebSocketHandler {
+
+    private final Environment environment;
 
     private final CloseableHttpClient build =
             HttpClientBuilder.create().disableRedirectHandling().build();
@@ -46,7 +49,7 @@ public class ProxyAgentWebSocketHandler extends TextWebSocketHandler {
                         restClient
                                 .method(HttpMethod.valueOf(httpRequest.getMethod()))
                                 .uri(
-                                        UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:8080")
+                                        UriComponentsBuilder.fromHttpUrl(getLocalHost())
                                                 .path(httpRequest.getUri().getPath())
                                                 .query(httpRequest.getUri().getQuery())
                                                 .build()
@@ -89,5 +92,13 @@ public class ProxyAgentWebSocketHandler extends TextWebSocketHandler {
 
             throw new RuntimeException(e);
         }
+    }
+
+    private String getLocalHost() {
+
+        return "http://127.0.0.1:"
+                + (environment.getProperty("server.port") == null
+                        ? "8080"
+                        : environment.getProperty("server.port"));
     }
 }

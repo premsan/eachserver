@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -26,18 +27,29 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
 
-    private final Map<String, WebSocketSession> idToActiveSession = new ConcurrentHashMap<>();
-    private final Map<String, ProxyHttpResponse> responseMap = new ConcurrentHashMap<>();
+    private static final int WAIT_RESPONSE_MAX_MS = 10_000;
+    private static final int WAIT_RESPONSE_SLEEP_MS = 100;
+
+    private final Map<String, WebSocketSession> sessionByUsername = new ConcurrentHashMap<>();
+    private final Map<String, ProxyHttpResponse> responseById = new ConcurrentHashMap<>();
 
     private final ObjectMapper objectMapper;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
-        idToActiveSession.put(
-                session.getId(),
-                new ConcurrentWebSocketSessionDecorator(session, 10000, 10 * 1024 * 1024));
-        super.afterConnectionEstablished(session);
+        final String username = session.getPrincipal().getName();
+
+        final WebSocketSession sessionWrapper =
+                new ConcurrentWebSocketSessionDecorator(session, 10000, 10 * 1024 * 1024);
+        final WebSocketSession previousSession = sessionByUsername.put(username, sessionWrapper);
+
+        if (Objects.nonNull(previousSession)) {
+
+            previousSession.close();
+        }
+
+        super.afterConnectionEstablished(sessionWrapper);
     }
 
     @Override
@@ -47,7 +59,7 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
             final ProxyHttpResponse proxyHttpResponse =
                     objectMapper.readValue(message.getPayload(), ProxyHttpResponse.class);
 
-            responseMap.put(proxyHttpResponse.getId(), proxyHttpResponse);
+            responseById.put(proxyHttpResponse.getId(), proxyHttpResponse);
 
         } catch (final IOException e) {
 
@@ -55,7 +67,10 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    public void sendMessage(final HttpServletRequest request, final HttpServletResponse response) {
+    public void sendMessage(
+            final String username,
+            final HttpServletRequest request,
+            final HttpServletResponse response) {
 
         final ProxyHttpRequest proxyHttpRequest = new ProxyHttpRequest();
 
@@ -87,26 +102,27 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
                             .lines()
                             .collect(Collectors.joining(System.lineSeparator())));
 
-            final WebSocketSession webSocketSession =
-                    idToActiveSession.get(getSessionId(request, response));
+            final WebSocketSession session = sessionByUsername.get(username);
 
-            if (webSocketSession == null) {
+            if (session == null) {
 
                 response.setStatus(404);
                 return;
             }
 
-            webSocketSession.sendMessage(
-                    new TextMessage(objectMapper.writeValueAsString(proxyHttpRequest)));
+            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(proxyHttpRequest)));
+
+            final long waitStartMs = System.currentTimeMillis();
 
             while (true) {
 
                 final ProxyHttpResponse proxyHttpResponse =
-                        responseMap.get(proxyHttpRequest.getId());
+                        responseById.remove(proxyHttpRequest.getId());
 
-                if (proxyHttpResponse == null) {
+                if (proxyHttpResponse == null
+                        && (System.currentTimeMillis() - waitStartMs) < WAIT_RESPONSE_MAX_MS) {
 
-                    Thread.sleep(100);
+                    Thread.sleep(WAIT_RESPONSE_SLEEP_MS);
 
                     continue;
                 }
@@ -136,13 +152,5 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public String getSessionId(
-            final HttpServletRequest request, final HttpServletResponse response) {
-
-        final String subdomain = request.getServerName().split("\\.")[0];
-
-        return new ArrayList<>(idToActiveSession.keySet()).get(0);
     }
 }

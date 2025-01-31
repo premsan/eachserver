@@ -18,23 +18,26 @@ import org.springframework.web.filter.GenericFilterBean;
 @RequiredArgsConstructor
 public class ProxyServerFilter extends GenericFilterBean {
 
+    private final ProxyServerProperties proxyServerProperties;
     private final ProxyServerWebSocketHandler serverWebSocketHandler;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
-        final String subdomain = req.getServerName().split("\\.")[0];
+        final String host = req.getServerName().substring(req.getServerName().indexOf('.') + 1);
 
-        if (!subdomain.startsWith("tunnel-")) {
+        if (!proxyServerProperties.getHostUris().contains(host)) {
 
             chain.doFilter(req, res);
             return;
         }
 
+        final String username = req.getServerName().substring(0, req.getServerName().indexOf('.'));
+
         final HttpServletRequest request = (HttpServletRequest) req;
         final HttpServletResponse response = (HttpServletResponse) res;
 
-        serverWebSocketHandler.sendMessage(request, response);
+        serverWebSocketHandler.sendMessage(username, request, response);
     }
 }

@@ -17,15 +17,11 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 public class ProxyServerConfiguration implements WebSocketConfigurer {
 
     private static final int MAX_MESSAGE_BUFFER_SIZE = 10 * 1024 * 1024;
-
-    private final ProxyServerAuthenticationHandshakeInterceptor
-            proxyServerAuthenticationHandshakeInterceptor;
     private final ProxyServerWebSocketHandler proxyServerWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(proxyServerWebSocketHandler, ProxyServerConnect.PATH);
-        //                .addInterceptors(proxyServerAuthenticationHandshakeInterceptor);
     }
 
     @Bean

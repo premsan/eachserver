@@ -121,7 +121,7 @@ public class SecurityConfiguration {
     public SpringSessionRememberMeServices rememberMeServices() {
         final SpringSessionRememberMeServices rememberMeServices =
                 new SpringSessionRememberMeServices();
-        // optionally customize
+
         rememberMeServices.setAlwaysRemember(true);
         return rememberMeServices;
     }

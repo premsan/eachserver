@@ -29,7 +29,8 @@ public class PaymentCreateController {
     @GetMapping(PaymentCreate.PATH)
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('PAYMENT_PAYMENT_CREATE')")
     public ModelAndView getPaymentCreate(
-            final @SignedToken SignedJWT signedToken, final PaymentCreate.Parameters parameters) {
+            final @SignedToken SignedJWT signedToken,
+            final PaymentCreate.RequestParameters requestParameters) {
 
         final ModelAndView model =
                 new ModelAndView("com/eachserver/payment/templates/payment-create");
@@ -38,7 +39,7 @@ public class PaymentCreateController {
                 Currency.getAvailableCurrencies().stream()
                         .map(Currency::getCurrencyCode)
                         .sorted(String::compareTo));
-        model.addObject("paymentCreate", parameters);
+        model.addObject("paymentCreate", requestParameters);
 
         return model;
     }
@@ -46,7 +47,8 @@ public class PaymentCreateController {
     @PostMapping(PaymentCreate.PATH)
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('PAYMENT_PAYMENT_CREATE')")
     public ModelAndView postPaymentCreate(
-            @Valid @ModelAttribute("paymentCreate") final PaymentCreate.Parameters paymentCreate,
+            @Valid @ModelAttribute("paymentCreate")
+                    final PaymentCreate.RequestParameters paymentCreate,
             final BindingResult bindingResult,
             final RedirectAttributes redirectAttributes,
             @CurrentSecurityContext final SecurityContext securityContext) {

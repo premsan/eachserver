@@ -5,7 +5,7 @@ import com.eachserver.security.permissionevaluator.PermissionEvaluators;
 import com.eachserver.security.user.User;
 import com.eachserver.security.user.UserRepository;
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,8 +21,11 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -46,6 +49,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
 
         return http.oauth2Login(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
                 .csrf(
                         httpSecurityCsrfConfigurer ->
                                 httpSecurityCsrfConfigurer.csrfTokenRepository(
@@ -55,7 +59,7 @@ public class SecurityConfiguration {
                 .anonymous(
                         httpSecurityAnonymousConfigurer ->
                                 httpSecurityAnonymousConfigurer.authorities(
-                                        getAnonymousAuthorities()))
+                                        securityProperties.getAnonymousGrantedAuthorities()))
                 .build();
     }
 
@@ -106,12 +110,7 @@ public class SecurityConfiguration {
                 authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
             }
 
-            if (!CollectionUtils.isEmpty(securityProperties.getAuthenticatedAuthorities())) {
-
-                authorities.addAll(
-                        AuthorityUtils.createAuthorityList(
-                                securityProperties.getAuthenticatedAuthorities()));
-            }
+            authorities.addAll(securityProperties.getAuthenticatedGrantedAuthorities());
 
             return new DefaultUser(
                     user.getId(), authorities, oidcUser.getIdToken(), oidcUser.getUserInfo());
@@ -122,7 +121,7 @@ public class SecurityConfiguration {
     public SpringSessionRememberMeServices rememberMeServices() {
         final SpringSessionRememberMeServices rememberMeServices =
                 new SpringSessionRememberMeServices();
-        // optionally customize
+
         rememberMeServices.setAlwaysRemember(true);
         return rememberMeServices;
     }
@@ -141,38 +140,63 @@ public class SecurityConfiguration {
         return expressionHandler;
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     static class DefaultUser extends DefaultOidcUser {
 
-        private String userId;
+        private String id;
 
         public DefaultUser(
-                final String userId,
+                final String id,
                 final Collection<? extends GrantedAuthority> authorities,
                 final OidcIdToken idToken,
                 final OidcUserInfo userInfo) {
             super(authorities, idToken, userInfo);
 
-            this.userId = userId;
+            this.id = id;
         }
 
         @Override
         public String getName() {
-            return userId;
+            return id;
         }
     }
 
-    private List<GrantedAuthority> getAnonymousAuthorities() {
+    @Bean
+    public UserDetailsService userDetailsService(
+            final SecurityProperties securityProperties,
+            final UserRepository userRepository,
+            final AuthorityRepository authorityRepository) {
 
-        final List<GrantedAuthority> anonymousAuthorities =
-                AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS");
+        return username -> {
+            Optional<User> userOptional = userRepository.findById(username);
 
-        if (!CollectionUtils.isEmpty(securityProperties.getAnonymousAuthorities())) {
+            if (userOptional.isEmpty()) {
 
-            anonymousAuthorities.addAll(
-                    AuthorityUtils.createAuthorityList(
-                            securityProperties.getAnonymousAuthorities()));
-        }
+                throw new UsernameNotFoundException("userId " + username + " not found");
+            }
 
-        return anonymousAuthorities;
+            final Collection<GrantedAuthority> authorities =
+                    authorityRepository.findByUserId(userOptional.get().getId()).stream()
+                            .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+                            .collect(Collectors.toList());
+
+            authorities.addAll(securityProperties.getAuthenticatedGrantedAuthorities());
+
+            final org.springframework.security.core.userdetails.User user =
+                    new org.springframework.security.core.userdetails.User(
+                            userOptional.get().getId(),
+                            userOptional.get().getPasswordHash(),
+                            !userOptional.get().getDisabled(),
+                            true,
+                            true,
+                            true,
+                            authorities);
+
+            return user;
+        };
     }
 }

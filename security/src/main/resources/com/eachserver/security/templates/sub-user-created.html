@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{com/eachserver/ui/templates/head-fragment}" />
+    <header th:replace="~{com/eachserver/ui/templates/header-fragment}" />
+    <body>
+        <section class="section content">
+            <dl>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Username</dt>
+                    <dd th:text="${subUserCreated.id}">Username</dd>
+                </div>
+                <div class="block">
+                    <dt class="title is-4 has-text-info">Password</dt>
+                    <dd th:text="${subUserCreated.password}">Password</dd>
+                </div>
+            </dl>
+        </section>
+    </body>
+    <footer th:replace="~{com/eachserver/ui/templates/footer-fragment}" />
+</html>

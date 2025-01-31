@@ -15,12 +15,16 @@ repositories {
 }
 
 dependencies {
-
+    implementation(project(":api"))
+    implementation(project(":application"))
+    implementation(project(":security"))
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
 
     testImplementation(platform(libs.org.junit.junit.bom))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -30,11 +34,13 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.bootJar {
-    enabled = false
-}
-
 spotless {
+    format("html") {
+        val htmlTabWidth: Int by rootProject.extra
+        prettier().config(mapOf("tabWidth" to htmlTabWidth))
+
+        target("src/**/templates/**/*.html")
+    }
     java {
         val googleJavaFormatVersion: String by rootProject.extra
 

@@ -29,6 +29,7 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
 
     private static final int WAIT_RESPONSE_MAX_MS = 10_000;
     private static final int WAIT_RESPONSE_SLEEP_MS = 100;
+    private static final int MAX_MESSAGE_BUFFER_SIZE = 10 * 1024 * 1024;
 
     private final Map<String, WebSocketSession> sessionByUsername = new ConcurrentHashMap<>();
     private final Map<String, ProxyHttpResponse> responseById = new ConcurrentHashMap<>();
@@ -41,7 +42,8 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
         final String username = session.getPrincipal().getName();
 
         final WebSocketSession sessionWrapper =
-                new ConcurrentWebSocketSessionDecorator(session, 10000, 10 * 1024 * 1024);
+                new ConcurrentWebSocketSessionDecorator(
+                        session, WAIT_RESPONSE_MAX_MS, MAX_MESSAGE_BUFFER_SIZE);
         final WebSocketSession previousSession = sessionByUsername.put(username, sessionWrapper);
 
         if (Objects.nonNull(previousSession)) {
@@ -106,7 +108,7 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
 
             if (session == null) {
 
-                response.setStatus(404);
+                response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
                 return;
             }
 
@@ -149,7 +151,7 @@ public class ProxyServerWebSocketHandler extends TextWebSocketHandler {
                 return;
             }
 
-        } catch (IOException | InterruptedException e) {
+        } catch (final IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

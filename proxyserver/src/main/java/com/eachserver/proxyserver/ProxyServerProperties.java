@@ -16,8 +16,8 @@ public class ProxyServerProperties {
 
     private List<URI> hostUris;
 
-    private List<String> getHosts() {
+    public List<String> getHosts() {
 
-        return hostUris.stream().map(URI::getHost).collect(Collectors.toList());
+        return hostUris.stream().map(URI::getAuthority).collect(Collectors.toList());
     }
 }

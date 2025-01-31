@@ -25,18 +25,23 @@ public class ProxyServerFilter extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
-        final String host = req.getServerName().substring(req.getServerName().indexOf('.') + 1);
+        final HttpServletRequest request = (HttpServletRequest) req;
+        final HttpServletResponse response = (HttpServletResponse) res;
 
-        if (!proxyServerProperties.getHostUris().contains(host)) {
+        final String host = request.getHeader("Host");
+        final String proxyHost = host.substring(host.indexOf('.') + 1);
+
+        String username = null;
+        if (proxyHost.length() < host.length()) {
+
+            username = host.substring(0, host.indexOf('.'));
+        }
+
+        if (!(username != null && proxyServerProperties.getHosts().contains(proxyHost))) {
 
             chain.doFilter(req, res);
             return;
         }
-
-        final String username = req.getServerName().substring(0, req.getServerName().indexOf('.'));
-
-        final HttpServletRequest request = (HttpServletRequest) req;
-        final HttpServletResponse response = (HttpServletResponse) res;
 
         serverWebSocketHandler.sendMessage(username, request, response);
     }

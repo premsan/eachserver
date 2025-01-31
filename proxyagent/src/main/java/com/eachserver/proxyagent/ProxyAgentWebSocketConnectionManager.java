@@ -1,6 +1,5 @@
 package com.eachserver.proxyagent;
 
-import com.eachserver.api.ProxyServerConnect;
 import com.eachserver.api.ProxyServerHost;
 import java.net.URI;
 import java.util.Objects;
@@ -33,7 +32,6 @@ public class ProxyAgentWebSocketConnectionManager extends WebSocketConnectionMan
 
         if (Objects.nonNull(proxyAgentProperties.getWebsocketUriOverride())) {
             return UriComponentsBuilder.fromUri(proxyAgentProperties.getWebsocketUriOverride())
-                    .path(ProxyServerConnect.PATH)
                     .build()
                     .toUri();
         }

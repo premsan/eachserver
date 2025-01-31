@@ -24,14 +24,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ProxyAgentWebSocketHandler extends TextWebSocketHandler {
 
     private final Environment environment;
+    private final ObjectMapper objectMapper;
 
-    private final CloseableHttpClient build =
+    private final CloseableHttpClient httpClient =
             HttpClientBuilder.create().disableRedirectHandling().build();
 
-    private final ObjectMapper objectMapper;
     private final RestClient restClient =
             RestClient.builder()
-                    .requestFactory(new HttpComponentsClientHttpRequestFactory(build))
+                    .requestFactory(new HttpComponentsClientHttpRequestFactory(httpClient))
                     .build();
 
     @Override
